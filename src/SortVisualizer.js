@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import React, { useState } from 'react';
-
+import { insertionSort } from "./InsertionSort.js"
 
 const Element = styled.div(({height}) => (`
     background: green;
@@ -28,7 +28,7 @@ class SortVisualizer extends React.Component {
     }
 
     componentDidMount() {
-        const array = Array.from({length: 50}, (x, i) => Math.random()*200);
+        const array = Array.from({length: 20}, (x, i) => Math.random()*200);
         
         console.log(array);
 
@@ -37,21 +37,26 @@ class SortVisualizer extends React.Component {
         });
     }
 
-    chane = () => {
-        this.setState(state => {
+    change = () => {
+        console.log('hej')
+        this.setState({
+            array:  insertionSort(this.state.array), 
+        });
+       
+        /*this.setState(state => {
           const array = state.array.concat(this.state.array[this.state.array.length-1] + 1);
      
           return {
             array   
           };
-        });
+        });*/
       };
     
 
 
     render() {
         return ( 
-            <ElementWrapper onClick={this.chane}>
+            <ElementWrapper onClick={this.change}>
                 {this.state.array.map(height => <Element height={height}/>)}
             </ElementWrapper>
         )
