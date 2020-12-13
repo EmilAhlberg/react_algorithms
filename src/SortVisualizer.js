@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import React, { useState } from 'react';
 import { insertionSort } from "./InsertionSort.js"
 
-const Element = styled.div(({height}) => (`
-    background: green;
+const Element = styled.div(({height, current}) => (`
+    background: ${current ? 'red' : 'green'} ;
     width: 10px;
     height: ${height}px;
     align-self: flex-end;
@@ -23,33 +23,37 @@ class SortVisualizer extends React.Component {
         super(props);
         this.state = {
             array: [],
-            viz: []
+            index: 0
         }
     }
 
     componentDidMount() {
-        const array = Array.from({length: 20}, (x, i) => Math.random()*200);
+        const array = Array.from({length: 100}, (x, i) => Math.random()*200);
         
         console.log(array);
 
         this.setState({
             array: array, 
         });
+
+        setTimeout(
+           this.change, 100
+        );
     }
 
     change = () => {
-        console.log('hej2')
+        let [index, isSorted, updatedArray] = insertionSort(this.state.array)
+        console.log(this.state.index, index, isSorted)
         this.setState({
-            array:  insertionSort(this.state.array), 
+            array: updatedArray, 
+            index: index
         });
-       
-        /*this.setState(state => {
-          const array = state.array.concat(this.state.array[this.state.array.length-1] + 1);
-     
-          return {
-            array   
-          };
-        });*/
+
+        if (!isSorted){
+            setTimeout(
+                this.change, 10
+            );
+        }
       };
     
 
@@ -57,7 +61,7 @@ class SortVisualizer extends React.Component {
     render() {
         return ( 
             <ElementWrapper onClick={this.change}>
-                {this.state.array.map(height => <Element height={height}/>)}
+                {this.state.array.map((height,i) => <Element height={height} current={this.state.index === i}/>)}
             </ElementWrapper>
         )
     }
