@@ -8,6 +8,7 @@ const Element = styled.div(({height}) => (`
     width: 10px;
     height: ${height}px;
     align-self: flex-end;
+    margin: 1px;
 `));
 
 const ElementWrapper = styled.div`
@@ -27,15 +28,12 @@ class SortVisualizer extends React.Component {
     }
 
     componentDidMount() {
-        const array = Array.from({length: 50}, (x, i) => i);
-        //const viz = array.map(height => <Element height={height}/>)
-
+        const array = Array.from({length: 50}, (x, i) => Math.random()*200);
         
         console.log(array);
 
         this.setState({
             array: array, 
-            //viz: viz
         });
     }
 
