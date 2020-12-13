@@ -38,7 +38,7 @@ class SortVisualizer extends React.Component {
     }
 
     change = () => {
-        console.log('hej')
+        console.log('hej2')
         this.setState({
             array:  insertionSort(this.state.array), 
         });
