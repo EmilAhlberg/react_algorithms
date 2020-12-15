@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { insertionSort } from "./InsertionSort.js"
 
 const Element = styled.div(({height, current}) => (`
-    background: ${current ? 'red' : 'green'} ;
-    width: 10px;
+    background: ${current ? 'red' : 'green'};
+    width: 0.3vw;
     height: ${height}px;
     align-self: flex-end;
     margin: 1px;
@@ -13,7 +13,7 @@ const Element = styled.div(({height, current}) => (`
 
 const ElementWrapper = styled.div`
     display: flex;
-    background: yellow;
+    background: white;
     flex-direction: row;
     justify-content: center;
 `;
@@ -23,7 +23,8 @@ class SortVisualizer extends React.Component {
         super(props);
         this.state = {
             array: [],
-            index: 0
+            index: 0,
+            algorithm: -1
         }
     }
 
@@ -35,30 +36,33 @@ class SortVisualizer extends React.Component {
         this.setState({
             array: array, 
         });
-
-        setTimeout(
-           this.change, 100
-        );
     }
 
     change = () => {
-        let [index, isSorted, updatedArray] = insertionSort(this.state.array)
-        console.log(this.state.index, index, isSorted)
-        this.setState({
-            array: updatedArray, 
-            index: index
-        });
+        if(this.props.index === 0) {            
+            let [index, isSorted, updatedArray] = insertionSort(this.state.array)
+            this.setState({
+                array: updatedArray, 
+                index: index
+            });
 
-        if (!isSorted){
-            setTimeout(
-                this.change, 10
-            );
+            if (!isSorted){
+                setTimeout(
+                    this.change, 8
+                );
+            }
         }
-      };
+    };
     
 
 
     render() {
+        if(this.state.algorithm != this.props.index) {
+            this.change()
+            this.setState({algorithm: this.props.index})
+        }
+
+
         return ( 
             <ElementWrapper onClick={this.change}>
                 {this.state.array.map((height,i) => <Element height={height} current={this.state.index === i}/>)}
@@ -66,18 +70,5 @@ class SortVisualizer extends React.Component {
         )
     }
 }
-
-
-
-const SortVisualizer2 = (viz) => {
-const [count, setCount] = useState([<Element height={100}/>,<Element height={200}/>,<Element height={300}/>]);
-  return(
-  <ElementWrapper>
-    {viz.map((x) => x)}
-  </ElementWrapper>)
-}
-
-
-
 
 export default SortVisualizer;
